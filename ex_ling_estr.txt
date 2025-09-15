@@ -1,0 +1,32 @@
+˜˜essa é minha linguagem de programacao inventada
+
+˜˜i = integer
+i.numero <- 3 .
+i.numero <- i.numero + 1 .
+i.numero <- + .
+i.numero <- -2 .
+
+˜˜s = string
+s.palavra_nova <- "Hello world!" .
+
+˜˜f = float
+f.numero_decimal <- 3.0 .
+
+˜˜b = boolean
+b.condicional <- false .
+
+- If [(i.numero + f.numero_decimal) == 6.0]
+-- b.condicional <- true .
+
+- If [i.numero == 3] -> Print[i.numero] .  ˜˜if em uma linha
+
+- Elif [(i.numero + f.numero_decimal) == -6.0]
+-- b.condicional <- false .
+
+- Else
+-- s.frase <- "nao convem"
+
+- While [b.condicional]
+-- s.palavra_nova <- "esta dando certo" . 
+For [i.count = 0 to i.numero step 1]
+-- Print[i.count] .
