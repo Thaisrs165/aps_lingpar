@@ -1,71 +1,56 @@
-# CleanBotVM
+# CleanBotVM (CleanLang++) 
 
 ## Linguagem estruturada (EBNF) 
 
 ```bash
 
-programa        = { comando } ;
+programa            = { instrucao } ;
 
-comando         = mover_cmd
-                | virar_cmd
-                | limpar_cmd
-                | print_cmd
-                | atribuicao
-                | condicional
-                | loop ;
+instrucao           = loop
+                    | condicional
+                    | comando_simples
+                    | exibir ;
 
-mover_cmd       = "mover" "(" ")" ";" ;
-virar_cmd       = "virar_direita" "(" ")" ";" ;
-limpar_cmd      = "limpar" "(" ")" ";" ;
-print_cmd       = "print" "(" expressao ")" ";" ;
-atribuicao      = identificador "=" expressao ";" ;
+loop                = "Enquanto houver sujeira:" { instrucao } "Fim" 
+                    | "Enquanto houver bateria:" { instrucao } "Fim";
 
-condicional     = "se" expressao "entao" { comando } [ "senao" { comando } ] "fim" ;
+condicional         = "Se" condicao "," comando_simples
+                    | "Senão," comando_simples ; 
 
-loop            = "enquanto" expressao { comando } "fim" ;
+comando_simples     = "virar" "."
+                    | "andar" "."
+                    | "limpar" "." ;
 
-expressao       = termo { operador_logico termo } ;
-termo           = fator { operador_aritmetico fator } ;
-fator           = numero
-                | booleano
-                | identificador
-                | funcao_embutida
-                | "not" fator
-                | "(" expressao ")" ;
+exibir              = "Exibir" string "." ; 
 
-funcao_embutida = "sujeira_aqui" "(" ")"
-                | "frente_bloqueada" "(" ")"
-                | "existe_sujeira" "(" ")"
-                | "bateria" ;
+condicao            = "bloqueado"
+                    | "sujo"
+                    | "bateria baixa"
+                    | "bateria" operador numero ;
 
-operador_logico     = "and" | "or" | "==" | "!=" | ">=" | "<=" | ">" | "<" ;
-operador_aritmetico = "+" | "-" | "*" | "/" ;
+operador            = ">" | "<" | ">=" | "<=" | "==" | "!=" ;
 
-booleano        = "true" | "false" ;
-identificador   = letra { letra | digito | "_" } ;
-numero          = digito { digito } ;
-string          = '"' { caractere } '"' ;
+string              = '"' { caractere } '"' ;
+numero              = digito { digito } ;
 
-letra           = "a" | ... | "z" | "A" | ... | "Z" ;
-digito          = "0" | ... | "9" ;
-caractere       = qualquer caractere visível exceto aspas duplas ; 
+caractere           = qualquer caractere visível exceto aspas duplas ;
+digito              = "0" |...| "9" ;
+
 
 ```
 
 ## Exemplo de uso:
 
 ```bash
-enquanto existe_sujeira() and bateria > 0
-    se not frente_bloqueada()
-        mover();
-    senao
-        virar_direita();
-    fim
+Enquanto houver bateria:
+    Enquanto houver sujeira:
+        Se bloqueado, virar.
+        Senão, andar.
+        Se sujo, limpar.
+    Fim
 
-    se sujeira_aqui()
-        limpar();
-    fim
-fim
+    Exibir "Limpeza concluída".
+Fim
 
-print("Tarefa concluída");
+Exibir "Bateria fraca". 
 ```
