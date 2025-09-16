@@ -68,5 +68,4 @@ enquanto existe_sujeira() and bateria > 0
 fim
 
 print("Tarefa concluída");
-
 ```
