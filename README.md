@@ -1,6 +1,6 @@
-# CleanBotVM (CleanLang++) 
+# CleanBotVM
 
-## Linguagem estruturada (EBNF) 
+## CleanLang++ - Linguagem estruturada (EBNF) 
 
 ```bash
 
