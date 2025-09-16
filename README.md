@@ -52,7 +52,7 @@ caractere       = qualquer caractere visível exceto aspas duplas ;
 
 ```
 
-# Exemplo de uso:
+## Exemplo de uso:
 
 ```bash
 enquanto existe_sujeira() and bateria > 0
