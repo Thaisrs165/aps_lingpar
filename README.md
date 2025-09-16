@@ -2,7 +2,7 @@
 
 ## CleanBotVM
 
-```
+```bash
 
 programa        = { comando } ;
 
@@ -54,7 +54,7 @@ caractere       = qualquer caractere visível exceto aspas duplas ;
 
 # Exemplo de uso:
 
-```
+```bash
 enquanto existe_sujeira() and bateria > 0
     se not frente_bloqueada()
         mover();
