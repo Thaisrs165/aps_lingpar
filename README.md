@@ -1,5 +1,7 @@
 # CleanBotVM
 
+A VM desenvolvida simula um robô limpador autônomo capaz de executar instruções de baixo nível geradas a partir de uma linguagem de alto nível personalizada. Ela possui dois registradores principais (bateria e sujeira), sensores de leitura (como "bloqueado" e "sujo"), suporte à memória para variáveis, e um conjunto de instruções como andar, virar, limpar, exibir mensagens, além de operações aritméticas e de controle de fluxo. É Turing-completa e permite controle total do robô em um ambiente virtual.
+
 ## CleanLang++ - Linguagem estruturada (EBNF) 
 
 ```bash
