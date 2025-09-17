@@ -48,13 +48,12 @@ caractere           = ? qualquer caractere visível exceto aspas duplas ? ;
 letra               = "a" | ... | "z" | "A" | ... | "Z" ;
 digito              = "0" | ... | "9" ;
 
-
-
 ```
 
 ## Exemplo de uso:
 
 ```bash
+
 Definir contador como 0.
 
 Enquanto houver bateria:
@@ -77,6 +76,5 @@ Senão,
     Exibir "Área limpa normalmente.".
 
 Exibir "Bateria fraca".
-```
-Exibir "Bateria fraca". 
+
 ```
