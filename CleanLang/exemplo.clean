@@ -1,0 +1,17 @@
+cat > exemplo.clean <<'EOF'
+Definir contador como 0.
+
+Enquanto houver bateria:
+    Enquanto houver sujeira:
+        Se bloqueado,
+            virar.
+        Senão,
+            andar.
+        Se sujo,
+            limpar.
+        contador = contador + 1.
+    Fim
+
+    Exibir "Limpeza concluída".
+Fim
+EOF
