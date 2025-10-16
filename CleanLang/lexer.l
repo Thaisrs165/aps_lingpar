@@ -11,27 +11,28 @@
 %%
 [ \t\r\n]+                      { }
 
-"Definir"|"definir"             { return DEF; }
-"como"|"Como"                   { return COMO; }
+"Definir"|"definir"               { return DEF; }
+"como"|"Como"                     { return COMO; }
 
-"Enquanto"|"enquanto"           { return ENQUANTO; }
-"houver"                        { return HOUVER; }
-"sujeira"|"Sujeira"             { return SUJEIRA; }
-"bateria"|"Bateria"             { return BATERIA; }
+"Enquanto"|"enquanto"             { return ENQUANTO; }
+"houver"                          { return HOUVER; }
+"sujeira"|"Sujeira"               { return SUJEIRA; }
+"bateria"|"Bateria"               { return BATERIA; }
 
-"Se"|"se"                       { return SE; }
-"Senão"|"senão"|"Senao"|"senao" { return SENAO; }
+"Se"|"se"                         { return SE; }
+"Senão"|"Senão"|"Senao"|"senao"   { return SENAO; }
 
-"virar"|"Virar"                 { return VIRAR; }
-"andar"|"Andar"                 { return ANDAR; }
-"limpar"|"Limpar"               { return LIMPAR; }
+"virar"|"Virar"                   { return VIRAR; }
+"andar"|"Andar"                   { return ANDAR; }
+"limpar"|"Limpar"                 { return LIMPAR; }
 
-"Exibir"|"exibir"               { return EXIBIR; }
-"Fim"|"fim"                     { return FIM; }
+"Exibir"|"exibir"                 { return EXIBIR; }
+"Fim"|"fim"                       { return FIM; }
 
-"bloqueado"|"Bloqueado"         { return BLOQUEADO; }
-"sujo"|"Sujo"                   { return SUJO; }
-"baixa"|"Baixa"                 { return BAIXA; }
+"bloqueado"|"Bloqueado"           { return BLOQUEADO; }
+"sujo"|"Sujo"                     { return SUJO; }
+"baixa"|"Baixa"                   { return BAIXA; }
+
 
 "=="                            { return EQ; }
 "!="                            { return NEQ; }

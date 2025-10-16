@@ -61,7 +61,7 @@ instr_block:
     ;
 
 condicional:
-      SE condicao COMMA instr_block opt_senao FIM
+      SE condicao COMMA instr_block opt_senao
     ;
 
 opt_senao:

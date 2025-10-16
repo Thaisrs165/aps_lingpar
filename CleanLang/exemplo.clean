@@ -1,6 +1,4 @@
-cat > exemplo.clean <<'EOF'
 Definir contador como 0.
-
 Enquanto houver bateria:
     Enquanto houver sujeira:
         Se bloqueado,
@@ -11,7 +9,6 @@ Enquanto houver bateria:
             limpar.
         contador = contador + 1.
     Fim
-
+    
     Exibir "Limpeza concluída".
 Fim
-EOF
