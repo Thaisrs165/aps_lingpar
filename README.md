@@ -1,6 +1,37 @@
 # CleanBotVM
 
-A VM desenvolvida simula um robô limpador autônomo capaz de executar instruções de baixo nível geradas a partir de uma linguagem de alto nível personalizada. Ela possui dois registradores principais (bateria e sujeira), sensores de leitura (como "bloqueado" e "sujo"), suporte à memória para variáveis, e um conjunto de instruções como andar, virar, limpar, exibir mensagens, além de operações aritméticas e de controle de fluxo. É Turing-completa e permite controle total do robô em um ambiente virtual.
+**CleanLang** é uma linguagem de programação simples criada para controlar um robô de limpeza (CleanBot).
+
+O projeto foi desenvolvido com **Flex** e **Bison**, e cobre todas as etapas de um compilador:
+análise léxica, sintática, semântica e execução em uma **Máquina Virtual** (VM) própria.
+
+## Estrutura do Projeto
+
+| Arquivo | Função |
+|----------|--------|
+| `lexer.l` | Analisador léxico (Flex) — identifica palavras e símbolos. |
+| `parser.y` | Analisador sintático e semântico (Bison) — valida a estrutura do código. |
+| `cleanbot_vm.c` | Máquina virtual — executa o código gerado pela linguagem. |
+| `teste.clean` | Programa exemplo em CleanLang. |
+| `Makefile` | Automação da compilação. |
+
+
+## Como Compilar e Executar
+
+```bash
+# 1. Gerar o analisador léxico e sintático
+flex lexer.l
+bison -d parser.y
+
+# 2. Compilar o compilador
+gcc lex.yy.c parser.tab.c -o cleanlang
+
+# 3. Compilar a Máquina Virtual
+gcc cleanbot_vm.c -o cleanbot_vm
+
+# 4. Rodar um programa CleanLang
+./cleanlang teste.clean
+```
 
 ## CleanLang++ - Linguagem estruturada (EBNF) 
 

@@ -1,4 +1,8 @@
 %{
+
+#define YYDEBUG 1
+int yydebug = 1;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +11,43 @@ extern int yylex();
 extern int yylineno;
 extern FILE *yyin;
 void yyerror(const char *s);
+
+
+/* ---------------- ANALISE SEMANTICA ---------------- */
+#define MAX_SYMBOLS 256
+
+typedef struct {
+    char name[64];
+    int initialized;
+} Symbol;
+
+Symbol symbols[MAX_SYMBOLS];
+int symbol_count = 0;
+
+
+int lookup_symbol(const char *name) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbols[i].name, name) == 0)
+            return i;
+    }
+    return -1;
+}
+
+
+int add_symbol(const char *name) {
+    if (lookup_symbol(name) != -1) {
+        fprintf(stderr, "Erro semântico: variável '%s' já declarada.\n", name);
+        return -1;
+    }
+    if (symbol_count >= MAX_SYMBOLS) {
+        fprintf(stderr, "Erro: limite de símbolos atingido.\n");
+        return -1;
+    }
+    strcpy(symbols[symbol_count].name, name);
+    symbols[symbol_count].initialized = 0;
+    return symbol_count++;
+}
+
 
 int parse_errors = 0;
 %}
@@ -48,6 +89,10 @@ instrucao:
     | declaracao_var DOT
     | atribuicao DOT
     | exibir DOT
+    | comando_simples
+    | declaracao_var
+    | atribuicao
+    | exibir
     ;
 
 loop:
@@ -79,11 +124,22 @@ exibir:
     ;
 
 declaracao_var:
-      DEF ID COMO NUMBER
-    ;
+    DEF ID COMO NUMBER
+        {
+            add_symbol($2);
+        }
+;
 
 atribuicao:
       ID ASSIGN expressao
+        {
+            int idx = lookup_symbol($1);
+            if (idx == -1) {
+                fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", $1);
+            } else {
+                symbols[idx].initialized = 1;
+            }
+        }
     ;
 
 condicao:
@@ -97,7 +153,23 @@ condicao:
 expressao:
       NUMBER
     | ID
+        {
+            int idx = lookup_symbol($1);
+            if (idx == -1) {
+                fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", $1);
+            } else if (!symbols[idx].initialized) {
+                fprintf(stderr, "Aviso: variável '%s' usada antes de ser inicializada.\n", $1);
+            }
+        }
     | ID PLUS NUMBER
+        {
+            int idx = lookup_symbol($1);
+            if (idx == -1) {
+                fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", $1);
+            } else if (!symbols[idx].initialized) {
+                fprintf(stderr, "Aviso: variável '%s' usada antes de ser inicializada.\n", $1);
+            }
+        }
     ;
 
 operador:

@@ -1,0 +1,6 @@
+def x como 5
+x = 3
+andar
+limpar
+exibir "teste\n"
+

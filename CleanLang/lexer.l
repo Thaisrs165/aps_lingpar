@@ -8,59 +8,57 @@
 #include "parser.tab.h"
 %}
 
+/* -------- REGRAS -------- */
 %%
-[ \t\r\n]+                      { }
+[ \t\r\n]+                      { /* ignora espaços e quebras */ }
 
-"Definir"|"definir"               { return DEF; }
-"como"|"Como"                     { return COMO; }
+"def"|"Def"|"Definir"|"definir"     { return DEF; }
+"como"|"Como"                       { return COMO; }
 
-"Enquanto"|"enquanto"             { return ENQUANTO; }
-"houver"                          { return HOUVER; }
-"sujeira"|"Sujeira"               { return SUJEIRA; }
-"bateria"|"Bateria"               { return BATERIA; }
+"enquanto"|"Enquanto"               { return ENQUANTO; }
+"houver"|"Houver"                   { return HOUVER; }
+"sujeira"|"Sujeira"                 { return SUJEIRA; }
+"bateria"|"Bateria"                 { return BATERIA; }
 
-"Se"|"se"                         { return SE; }
-"Senão"|"Senão"|"Senao"|"senao"   { return SENAO; }
+"se"|"Se"                           { return SE; }
+"senao"|"Senao"|"senão"|"Senão"     { return SENAO; }
 
-"virar"|"Virar"                   { return VIRAR; }
-"andar"|"Andar"                   { return ANDAR; }
-"limpar"|"Limpar"                 { return LIMPAR; }
+"virar"|"Virar"                     { return VIRAR; }
+"andar"|"Andar"                     { return ANDAR; }
+"limpar"|"Limpar"                   { return LIMPAR; }
 
-"Exibir"|"exibir"                 { return EXIBIR; }
-"Fim"|"fim"                       { return FIM; }
+"exibir"|"Exibir"                   { return EXIBIR; }
+"fim"|"Fim"                         { return FIM; }
 
-"bloqueado"|"Bloqueado"           { return BLOQUEADO; }
-"sujo"|"Sujo"                     { return SUJO; }
-"baixa"|"Baixa"                   { return BAIXA; }
+"bloqueado"|"Bloqueado"             { return BLOQUEADO; }
+"sujo"|"Sujo"                       { return SUJO; }
+"baixa"|"Baixa"                     { return BAIXA; }
 
+"=="                                { return EQ; }
+"!="                                { return NEQ; }
+">="                                { return GE; }
+"<="                                { return LE; }
+">"                                 { return GT; }
+"<"                                 { return LT; }
+"+"                                 { return PLUS; }
 
-"=="                            { return EQ; }
-"!="                            { return NEQ; }
-">="                            { return GE; }
-"<="                            { return LE; }
-">"                             { return GT; }
-"<"                             { return LT; }
-"+"                             { return PLUS; }
+[0-9]+                              { yylval.num = atoi(yytext); return NUMBER; }
 
-[0-9]+                          { yylval.num = atoi(yytext); return NUMBER; }
+\"([^\"\\]|\\.)*\"                  {
+                                        int L = yyleng;
+                                        char *s = (char*)malloc(L - 1);
+                                        strncpy(s, yytext + 1, L - 2);
+                                        s[L - 2] = '\0';
+                                        yylval.str = s;
+                                        return STRING;
+                                    }
 
-\"([^\"\\]|\\.)*\"              {
-                                    int L = yyleng;
-                                    char *s = (char*)malloc(L-1);
-                                    strncpy(s, yytext+1, L-2);
-                                    s[L-2] = '\0';
-                                    yylval.str = s;
-                                    return STRING;
-                                }
+[a-zA-Z_][a-zA-Z0-9_]*              { yylval.str = strdup(yytext); return ID; }
 
-[a-zA-Z_][a-zA-Z0-9_]*          { yylval.str = strdup(yytext); return ID; }
-
-":"                             { return COLON; }
-"."                             { return DOT; }
-","                             { return COMMA; }
-"="                             { return ASSIGN; }
-
-.                               { fprintf(stderr, "Linha %d: caractere desconhecido: '%s'\n", yylineno, yytext); }
+":"                                 { return COLON; }
+"."                                 { return DOT; }
+","                                 { return COMMA; }
+"="                                 { return ASSIGN; }
+";"                                 { return DOT; }  /* <-- permite usar ponto e vírgula */
+.                                   { fprintf(stderr, "Linha %d: caractere desconhecido: '%s'\n", yylineno, yytext); }
 %%
-
-

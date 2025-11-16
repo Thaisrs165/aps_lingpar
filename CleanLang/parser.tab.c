@@ -136,6 +136,10 @@
 /* Copy the first part of user declarations.  */
 #line 1 "parser.y"
 
+
+#define YYDEBUG 1
+int yydebug = 1;
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -144,6 +148,43 @@ extern int yylex();
 extern int yylineno;
 extern FILE *yyin;
 void yyerror(const char *s);
+
+
+/* ---------------- ANALISE SEMANTICA ---------------- */
+#define MAX_SYMBOLS 256
+
+typedef struct {
+    char name[64];
+    int initialized;
+} Symbol;
+
+Symbol symbols[MAX_SYMBOLS];
+int symbol_count = 0;
+
+
+int lookup_symbol(const char *name) {
+    for (int i = 0; i < symbol_count; i++) {
+        if (strcmp(symbols[i].name, name) == 0)
+            return i;
+    }
+    return -1;
+}
+
+
+int add_symbol(const char *name) {
+    if (lookup_symbol(name) != -1) {
+        fprintf(stderr, "Erro semântico: variável '%s' já declarada.\n", name);
+        return -1;
+    }
+    if (symbol_count >= MAX_SYMBOLS) {
+        fprintf(stderr, "Erro: limite de símbolos atingido.\n");
+        return -1;
+    }
+    strcpy(symbols[symbol_count].name, name);
+    symbols[symbol_count].initialized = 0;
+    return symbol_count++;
+}
+
 
 int parse_errors = 0;
 
@@ -168,13 +209,13 @@ int parse_errors = 0;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 14 "parser.y"
+#line 55 "parser.y"
 {
     int num;
     char *str;
 }
 /* Line 193 of yacc.c.  */
-#line 178 "parser.tab.c"
+#line 219 "parser.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -187,7 +228,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 191 "parser.tab.c"
+#line 232 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -409,7 +450,7 @@ union yyalloc
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  36
+#define YYNRULES  40
 /* YYNRULES -- Number of states.  */
 #define YYNSTATES  65
 
@@ -460,9 +501,10 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyprhs[] =
 {
        0,     0,     3,     4,     7,     9,    11,    14,    17,    20,
-      23,    30,    37,    39,    42,    48,    49,    53,    55,    57,
-      59,    62,    67,    71,    73,    75,    78,    82,    86,    88,
-      90,    94,    96,    98,   100,   102,   104
+      23,    25,    27,    29,    31,    38,    45,    47,    50,    56,
+      57,    61,    63,    65,    67,    70,    75,    79,    81,    83,
+      86,    90,    94,    96,    98,   102,   104,   106,   108,   110,
+     112
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -470,24 +512,26 @@ static const yytype_int8 yyrhs[] =
 {
       34,     0,    -1,    -1,    34,    35,    -1,    36,    -1,    38,
       -1,    40,    30,    -1,    42,    30,    -1,    43,    30,    -1,
-      41,    30,    -1,     8,     9,    10,    32,    37,    18,    -1,
-       8,     9,    11,    32,    37,    18,    -1,    35,    -1,    37,
-      35,    -1,    12,    44,    31,    37,    39,    -1,    -1,    13,
-      31,    37,    -1,    14,    -1,    15,    -1,    16,    -1,    17,
-       5,    -1,     6,     4,     7,     3,    -1,     4,    29,    45,
-      -1,    19,    -1,    20,    -1,    11,    21,    -1,    11,    46,
-       3,    -1,     4,    46,     3,    -1,     3,    -1,     4,    -1,
-       4,    28,     3,    -1,    24,    -1,    25,    -1,    26,    -1,
-      27,    -1,    22,    -1,    23,    -1
+      41,    30,    -1,    40,    -1,    42,    -1,    43,    -1,    41,
+      -1,     8,     9,    10,    32,    37,    18,    -1,     8,     9,
+      11,    32,    37,    18,    -1,    35,    -1,    37,    35,    -1,
+      12,    44,    31,    37,    39,    -1,    -1,    13,    31,    37,
+      -1,    14,    -1,    15,    -1,    16,    -1,    17,     5,    -1,
+       6,     4,     7,     3,    -1,     4,    29,    45,    -1,    19,
+      -1,    20,    -1,    11,    21,    -1,    11,    46,     3,    -1,
+       4,    46,     3,    -1,     3,    -1,     4,    -1,     4,    28,
+       3,    -1,    24,    -1,    25,    -1,    26,    -1,    27,    -1,
+      22,    -1,    23,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    40,    40,    41,    45,    46,    47,    48,    49,    50,
-      54,    55,    59,    60,    64,    67,    68,    72,    73,    74,
-      78,    82,    86,    90,    91,    92,    93,    94,    98,    99,
-     100,   104,   105,   106,   107,   108,   109
+       0,    81,    81,    82,    86,    87,    88,    89,    90,    91,
+      92,    93,    94,    95,    99,   100,   104,   105,   109,   112,
+     113,   117,   118,   119,   123,   127,   134,   146,   147,   148,
+     149,   150,   154,   155,   164,   176,   177,   178,   179,   180,
+     181
 };
 #endif
 
@@ -522,18 +566,20 @@ static const yytype_uint16 yytoknum[] =
 static const yytype_uint8 yyr1[] =
 {
        0,    33,    34,    34,    35,    35,    35,    35,    35,    35,
-      36,    36,    37,    37,    38,    39,    39,    40,    40,    40,
-      41,    42,    43,    44,    44,    44,    44,    44,    45,    45,
-      45,    46,    46,    46,    46,    46,    46
+      35,    35,    35,    35,    36,    36,    37,    37,    38,    39,
+      39,    40,    40,    40,    41,    42,    43,    44,    44,    44,
+      44,    44,    45,    45,    45,    46,    46,    46,    46,    46,
+      46
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     2,     1,     1,     2,     2,     2,     2,
-       6,     6,     1,     2,     5,     0,     3,     1,     1,     1,
-       2,     4,     3,     1,     1,     2,     3,     3,     1,     1,
-       3,     1,     1,     1,     1,     1,     1
+       1,     1,     1,     1,     6,     6,     1,     2,     5,     0,
+       3,     1,     1,     1,     2,     4,     3,     1,     1,     2,
+       3,     3,     1,     1,     3,     1,     1,     1,     1,     1,
+       1
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -541,13 +587,13 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       2,     0,     1,     0,     0,     0,     0,    17,    18,    19,
-       0,     3,     4,     5,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    23,    24,     0,    20,     6,     9,     7,
-       8,    28,    29,    22,     0,     0,     0,    35,    36,    31,
-      32,    33,    34,     0,    25,     0,     0,     0,    21,     0,
-       0,    27,    26,    12,    15,    30,     0,     0,     0,    13,
-      14,    10,    11,     0,    16
+       2,     0,     1,     0,     0,     0,     0,    21,    22,    23,
+       0,     3,     4,     5,    10,    13,    11,    12,     0,     0,
+       0,     0,     0,    27,    28,     0,    24,     6,     9,     7,
+       8,    32,    33,    26,     0,     0,     0,    39,    40,    35,
+      36,    37,    38,     0,    29,     0,     0,     0,    25,     0,
+       0,    31,    30,    16,    19,    34,     0,     0,     0,    17,
+      18,    14,    15,     0,    20
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -1435,9 +1481,52 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-      
+        case 25:
+#line 128 "parser.y"
+    {
+            add_symbol((yyvsp[(2) - (4)].str));
+        ;}
+    break;
+
+  case 26:
+#line 135 "parser.y"
+    {
+            int idx = lookup_symbol((yyvsp[(1) - (3)].str));
+            if (idx == -1) {
+                fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", (yyvsp[(1) - (3)].str));
+            } else {
+                symbols[idx].initialized = 1;
+            }
+        ;}
+    break;
+
+  case 33:
+#line 156 "parser.y"
+    {
+            int idx = lookup_symbol((yyvsp[(1) - (1)].str));
+            if (idx == -1) {
+                fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", (yyvsp[(1) - (1)].str));
+            } else if (!symbols[idx].initialized) {
+                fprintf(stderr, "Aviso: variável '%s' usada antes de ser inicializada.\n", (yyvsp[(1) - (1)].str));
+            }
+        ;}
+    break;
+
+  case 34:
+#line 165 "parser.y"
+    {
+            int idx = lookup_symbol((yyvsp[(1) - (3)].str));
+            if (idx == -1) {
+                fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", (yyvsp[(1) - (3)].str));
+            } else if (!symbols[idx].initialized) {
+                fprintf(stderr, "Aviso: variável '%s' usada antes de ser inicializada.\n", (yyvsp[(1) - (3)].str));
+            }
+        ;}
+    break;
+
+
 /* Line 1267 of yacc.c.  */
-#line 1441 "parser.tab.c"
+#line 1530 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1651,7 +1740,7 @@ yyreturn:
 }
 
 
-#line 112 "parser.y"
+#line 184 "parser.y"
 
 
 void yyerror(const char *s) {
