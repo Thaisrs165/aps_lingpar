@@ -33,6 +33,10 @@ gcc cleanbot_vm.c -o cleanbot_vm
 ./cleanlang teste.clean
 ```
 
+## Slides apresentação
+
+https://docs.google.com/presentation/d/1hdZkYi8bdCgLE1zMz3A2QgFyvosn0RGXR8eT4_9U_9Q/edit?usp=sharing
+
 ## CleanLang++ - Linguagem estruturada (EBNF) 
 
 ```bash
